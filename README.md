@@ -8,11 +8,12 @@ Signin to Azure AD B2C with Verifiable Credentials.
  
 ![Scan QR code](media/b2c-vc-scan-qr-code.png)
 
-## What you need to deploy this solution is
+## What you need to deploy and test this solution is
 
 - An Azure AD with atleast one P1 license
 - An Azure subscription
 - An Azure AD B2C tenant
+- Latest Microsoft Authenticator on an iOS or Android mobile device
  
 ## What you will deploy
 
