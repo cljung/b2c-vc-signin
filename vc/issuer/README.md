@@ -22,7 +22,7 @@ The didconfig-b2c.json file looks like below.
     "azClientId": "AppID of the app in that tenant that can access the KeyVault",
     "azClientSecret": "app key",
     "kvVaultUri": "https://your-keyvault-name.vault.azure.net/",
-    "kvSigningKeyId": "sig_5848e1db",
+    "kvSigningKeyId": "sig_58...db",
     "kvRemoteSigningKeyId" : "issuerSigningKeyIon-...guid...",
     "did": "did:ion:...something...",
     "resolverEndpoint": "https://beta.did.msidentity.com/v1.0/9885457a-2026-4e2c-a47e-32ff52ea0b8d/verifiableCredential/contracts/YourtenantMembership"
