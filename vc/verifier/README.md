@@ -1,4 +1,4 @@
-# Sample Issuer
+# Sample Verifier
 
 ## Steps to deploy
 
@@ -6,10 +6,10 @@ You to have [node.js](https://nodejs.org/en/download/) installed locally on a de
 The issuer needs to be accessable on a public endpoint as that is the way Microsoft Authenticator can talk to the service. An easy way to test this is via install [ngrok](https://ngrok.com/download) and let it proxy your localhost as a public endpoint.
 
 1. git clone this repo
-1. cd into vc\issuer
+1. cd into vc\verifier
 1. run `npm install`
 1. Edit didconfig-b2c.json (see below)
-1. Start ngrok in a separate command window `ngrok http 8081`
+1. Start ngrok in a separate command window `ngrok http 8082`
 1. Start the sample issuer from a command window `node app.js` 
 
 ## Edit didconfig-b2c.json
@@ -25,7 +25,15 @@ The didconfig-b2c.json file looks like below.
     "kvSigningKeyId": "sig_58...db",
     "kvRemoteSigningKeyId" : "issuerSigningKeyIon-...guid...",
     "did": "did:ion:...something...",
-    "resolverEndpoint": "https://beta.did.msidentity.com/v1.0/9885457a-2026-4e2c-a47e-32ff52ea0b8d/verifiableCredential/contracts/YourtenantMembership"
+    "didVerifier": "did:ion:...something...",
+    "resolverEndpoint": "https://beta.did.msidentity.com/v1.0/9885457a-2026-4e2c-a47e-32ff52ea0b8d/verifiableCredential/contracts/YourtenantMembership",
+    "credentialType": "YourtenantMembership",
+    "client": {
+        "client_name": "Yourtenant Verifier",
+        "logo_uri": "https://yourstorageaccount.blob.core.windows.net/uxcust/templates/images/snoopy-small.jpg",
+        "tos_uri": "https://www.microsoft.com/servicesagreement",
+        "client_purpose": "To check if you know how to use verifiable credentials."
+    }
 }
 ```
 
@@ -43,4 +51,4 @@ The `kvSigningKeyId` can be found via browsing to `https://beta.discover.did.msi
 
 ## Test
 
-Once you have ngrok and the sample issuer started, browse to the website using the ngrok url, launch the QR code and scan it using Microsoft Authenticator. If it the first time you do this in the Authenticator, you will not have the button `Credentials` at the bottom. You then need to do Add Account and select Other which will start the camera to scan the QR code.
+Once you have ngrok and the sample issuer started, browse to the website using the ngrok url, launch the QR code and scan it using Microsoft Authenticator. You should already have a VC from running the sample issuer, so all you need to do is to scan the QR code.

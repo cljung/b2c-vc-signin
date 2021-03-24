@@ -2,7 +2,7 @@
 
 ## How to issue your own credentials from Azure AD B2C
 
-You need to follow setup procedure for enabling Verifiable Credentials in your Azure AD Premium tenant. The docs can be found [here](https://didproject.azurewebsites.net/docs/issuer-setup.html).
+You need to follow setup procedure for enabling Verifiable Credentials in your Azure AD Premium tenant. The docs can be found [here](https://didproject.azurewebsites.net/docs/issuer-setup.html). You can also use the ARM template located in the [vc-setup](./vc-setup) folder to create Azure resources needed for the VC issuance.
 
 Note that you will not use this Azure AD tenant as the Identity Provider for the issuing of the VC. You just need to configure it in AAD due to license reasons. 
 
