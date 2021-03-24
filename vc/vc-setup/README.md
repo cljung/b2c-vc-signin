@@ -10,7 +10,7 @@ First, you need to make sure that you are using Azure Active Directory P1 or P2.
 ## Verify you can see Enterprise Application Verifiable Credentials Issuer Service
 Second, you need to make sure you see the application named `Verifiable Credentials Issuer Service` in the `Enterprise Application` section in the AAD blade. Switch to Type = `Microsoft Application` and search for it.
  
-![Verifiable Credentials Issuer Service](./media/admin-screenshot-search-apps.png)
+![Verifiable Credentials Issuer Service](/media/admin-screenshot-search-apps.png)
 
 ## Run the deployment script
 In order to run this script, you need to have access to an Azure subscription that uses the intended Azure Active Directory as its authorative directory. If the subscription you intend to use is protected by another directory, you will not be able to issue credentials.
@@ -70,7 +70,7 @@ When you are done, go to the `Properties` part in the `VC Blade` in portal.azure
 
 Finally, it is time to git clone the [VC Issuer sample](https://github.com/Azure-Samples/active-directory-verifiable-credentials) and follow the instructions for how to get that up and running. The `didconfig.json` template file that the deployment script generated should replace the file in the [issuer/didconfig.json](https://github.com/Azure-Samples/active-directory-verifiable-credentials/blob/main/issuer/didconfig.json) file. 
 
-![Getting Started](./media/admin-screenshot-issuer-details.png)
+![Getting Started](/media/admin-screenshot-issuer-details.png)
 
 There are three additional changes you need to do:
 - kvSigninKeyId - see explanation below
