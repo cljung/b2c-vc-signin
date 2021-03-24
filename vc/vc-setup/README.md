@@ -31,7 +31,7 @@ Then run the below command after replacing the respective parameters with the na
          -IssuerAppName "VC Issuer Sample" -VCType "ContosoEmployee" -GenerateConfigFiles 
 ```
 
-**PLEASE NOTE YOU NEED TO CHANGE THE `KeyVaultName` AND THE `StorageAccountName` TO BE GLOBBALY UNIQUE. ***
+**PLEASE NOTE YOU NEED TO CHANGE THE `KeyVaultName` AND THE `StorageAccountName` TO BE GLOBBALY UNIQUE. **
 
 The script will:
 - Register an app in Azure AD for your VC Issuer sample (the -IssuerAppName parameter). 
