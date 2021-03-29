@@ -82,9 +82,21 @@ app.use(function (req, res, next) {
   next();
 });
 
+function getDateFormatted() {
+  return new Date().toISOString().replace("T", " ");
+}
+function requestTrace( req ) {
+  var h1 = '//****************************************************************************';
+  console.log( `${h1}\n${getDateFormatted()}: ${req.method} ${req.protocol}://${req.hostname}${req.originalUrl}\n'x-forwarded-for': ${req.headers['x-forwarded-for']}` );
+  if ( req.method == 'POST') {
+    console.log( req.body )
+  }
+}
+
 // echo function so you can test deployment
 app.get("/echo",
     function (req, res) {
+        requestTrace( req );
         res.status(200).json({
             'date': new Date().toISOString(),
             'api': req.protocol + '://' + req.hostname + req.originalUrl,
@@ -102,6 +114,7 @@ app.get("/echo",
 
 // Serve index.html as the home page
 app.get('/', function (req, res) { 
+  requestTrace( req );
   res.sendFile('public/index.html', {root: __dirname})
 })
 
@@ -122,7 +135,7 @@ app.get('/logo.png', function (req, res) {
 // and return a reference to the issuance reqeust. The reference
 // will be displayed to the user on the client side as a QR code.
 app.get('/presentation-request', async (req, res) => {
-  console.log( `GET presentation-request session.id=${req.session.id}` );
+  requestTrace( req );
   // Construct a request to issue a verifiable credential 
   // using the verifiable credential issuer service
   state = req.session.id;
@@ -166,7 +179,7 @@ app.get('/presentation-request', async (req, res) => {
 // presentation request to this URL. This route simply returns the cached
 // presentation request to Authenticator.
 app.get('/presentation-request.jwt', async (req, res) => {
-  console.log( `GET presentation-request.jwt?id=${req.query.id}` );
+  requestTrace( req );
   // Look up the issue reqeust by session ID
   sessionStore.get(req.query.id, (error, session) => {
     console.log( `Presentation Request:\n${session.presentationRequest.request}` );
@@ -179,9 +192,11 @@ app.get('/presentation-request.jwt', async (req, res) => {
 // at this URL. We can verify the credential and extract its contents
 // to verify the user is a Verified Credential Ninja.
 app.post('/presentation-response', parser, async (req, res) => {
-  //console.log( `POST presentation-response state=${req.body.state}`);
-  console.log( 'POST presentation-response\nbody:' );
-  console.log(JSON.stringify(req.body))
+  requestTrace( req );
+  if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
+    console.log('BODY missing');
+    return res.send()
+  }  
   // Set up the Verifiable Credentials SDK to validate all signatures
   // and claims in the credential presentation.
   const clientId = `https://${req.hostname}/presentation-response`
@@ -197,12 +212,12 @@ app.post('/presentation-response', parser, async (req, res) => {
   const token = req.body.id_token;
   const validationResponse = await validator.validate(req.body.id_token);
   if (!validationResponse.result) {
-      console.error(`Validation failed: ${validationResponse.detailedError}`);
+      console.error(`${getDateFormatted()}Validation failed: ${validationResponse.detailedError}`);
       return res.send()
   }
 
   var verifiedCredential = validationResponse.validationResult.verifiableCredentials[credentialType].decodedToken;
-  console.log(`Verifier Validation result: ${verifiedCredential.vc.credentialSubject.firstName} ${verifiedCredential.vc.credentialSubject.lastName} is a ${credentialType}!`);
+  console.log(`${getDateFormatted()}Verifier Validation result: ${verifiedCredential.vc.credentialSubject.firstName} ${verifiedCredential.vc.credentialSubject.lastName} is a ${credentialType}!`);
 
   // Store the successful presentation in session storage
   sessionStore.get(req.body.state, (error, session) => {
@@ -217,8 +232,8 @@ app.post('/presentation-response', parser, async (req, res) => {
 // of a Verified Credential Ninja card. Updates the browser UI with
 // a successful message if the user is a verified ninja.
 app.get('/presentation-response', async (req, res) => {
+  requestTrace( req );
   var id = req.query.id;
-  console.log( `GET presentation-response  session.id=${id}` );
   // If a credential has been received, display the contents in the browser
   sessionStore.get( id, (error, session) => {
     if (req.session.verifiedCredential) {
@@ -234,8 +249,8 @@ app.get('/presentation-response', async (req, res) => {
 })
 
 app.get('/presentation-response-b2c', async (req, res) => {
+  requestTrace( req );
   var id = req.query.id;
-  console.log( `GET presentation-response-b2c  session.id=${id}` );
   // If a credential has been received, display the contents in the browser
   sessionStore.get( id, (error, session) => {
     var credentialsVerified = false;
@@ -264,8 +279,8 @@ app.get('/presentation-response-b2c', async (req, res) => {
 // same as above but for B2C where we return 409 Conflict if Auth Result isn't OK
 var parserJson = bodyParser.json();
 app.post('/presentation-response-b2c', parserJson, async (req, res) => {
-  var id = req.body.id;
-  console.log( `POST presentation-response-b2c  session.id=${id}` );
+  requestTrace( req );
+  var id = req.body.id;  
   // If a credential has been received, display the contents in the browser
   sessionStore.get( id, (error, session) => {
     if (session && session.verifiedCredential) {
