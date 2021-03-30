@@ -8,6 +8,13 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_VC_TrustFrameworkExten
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <!-- VCServiceUrl - we send the url for the node.js verifier app to the browser in this claim -->
+      <ClaimType Id="VCServiceUrl">
+        <DisplayName>VCServiceUrl</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>VV Service Url</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
       <!-- State Id between backend and Authenticator app. We use it to pull the auth result-->
       <ClaimType Id="VCStateId">
         <DisplayName>VCStateId</DisplayName>
@@ -161,9 +168,12 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_VC_TrustFrameworkExten
           <IncludeInSso>false</IncludeInSso>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="VCStateId" />
+            <!-- if you change this one, you need to change the ServiceUrl for the REST API below -->
+            <InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://yourappname.azurewebsites.net" />
           </InputClaims>
           <DisplayClaims>
             <DisplayClaim ClaimTypeReferenceId="VCStateId" />
+            <DisplayClaim ClaimTypeReferenceId="VCServiceUrl" />
           </DisplayClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName" />
