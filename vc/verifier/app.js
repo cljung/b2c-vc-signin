@@ -39,7 +39,7 @@ const client = config.client;
 
 /////////// Set the expected values for the Verifiable Credential
 
-const credential = config.resolverEndpoint
+const credential = config.manifest
 const issuerDid = [ config.did ]
 var credentialType = '';
 var didContract = null;

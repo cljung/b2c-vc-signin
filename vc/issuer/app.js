@@ -47,7 +47,7 @@ var crypto = new CryptoBuilder()
 // const credential = 'https://portableidentitycards.azure-api.net/v1.0/3c32ed40-8a10-465b-8ba4-0b1e86882668/portableIdentities/contracts/VerifiedCredentialNinja';
 // const credentialType = ['VerifiedCredentialNinja'];
 
-const credential = config.resolverEndpoint
+const credential = config.manifest
 var credentialType = [''];
 var didContract = null;
 
