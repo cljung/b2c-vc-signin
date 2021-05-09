@@ -169,7 +169,8 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_VC_TrustFrameworkExten
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="VCStateId" />
             <!-- if you change this one, you need to change the ServiceUrl for the REST API below -->
-            <InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://yourappname.azurewebsites.net" />
+            <InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://yourappname.azurewebsites.net/api/verifier" />
+            <!--<InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://a8d1a862ded5.ngrok.io/api/verifier" />-->
           </InputClaims>
           <DisplayClaims>
             <DisplayClaim ClaimTypeReferenceId="VCStateId" />
@@ -198,14 +199,41 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_VC_TrustFrameworkExten
         <TechnicalProfile Id="SelfAsserted-VCSigninWithObject">
           <DisplayName>Verifiable Credentials</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.vc</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="VCStateId" />
+            <!-- if you change this one, you need to change the ServiceUrl for the REST API below -->
+            <InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://yourappname.azurewebsites.net/api/verifier" />
+            <!--<InputClaim ClaimTypeReferenceId="VCServiceUrl" AlwaysUseDefaultValue="true" DefaultValue="https://a8d1a862ded5.ngrok.io/api/verifier" />-->
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="VCStateId" />
+            <DisplayClaim ClaimTypeReferenceId="VCServiceUrl" />
+          </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="VCCredentialType" />
+            <OutputClaim ClaimTypeReferenceId="VCCredentialType" />
+            <OutputClaim ClaimTypeReferenceId="VCSubject" />
+            <OutputClaim ClaimTypeReferenceId="VCIssuer" />
+            <OutputClaim ClaimTypeReferenceId="VCKey" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="DID" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="REST-VC-GetAuthResult" />
-            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
             <!-- make sure the user exists in the directory -->
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
           </ValidationTechnicalProfiles>
-          <IncludeTechnicalProfile ReferenceId="SelfAsserted-VCSigninNoObject" />
         </TechnicalProfile>
-
       </TechnicalProfiles>
     </ClaimsProvider>
     <!-- REST API Claims Provider -->
@@ -217,7 +245,8 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_VC_TrustFrameworkExten
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <!-- TODO: change the url -->
-            <Item Key="ServiceUrl">https://yourappname.azurewebsites.net/presentation-response-b2c</Item>
+            <Item Key="ServiceUrl">https://yourappname.azurewebsites.net/api/verifier/presentation-response-b2c</Item>
+            <!--<Item Key="ServiceUrl">https://a8d1a862ded5.ngrok.io/api/verifier/presentation-response-b2c</Item>-->
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>

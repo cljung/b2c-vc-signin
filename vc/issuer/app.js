@@ -71,7 +71,7 @@ app.use(session({
 }))
 
 // echo function so you can test deployment
-app.get("/echo",
+app.get("/api/issuer/echo",
     function (req, res) {
         res.status(200).json({
             'date': new Date().toISOString(),
@@ -103,7 +103,7 @@ app.get('/logo.png', function (req, res) {
 // Generate an issuance request, cache it on the server,
 // and return a reference to the issuance reqeust. The reference
 // will be displayed to the user on the client side as a QR code.
-app.get('/issue-request', async (req, res) => {
+app.get('/api/issuer/issue-request', async (req, res) => {
 
   // Construct a request to issue a verifiable credential 
   // using the verifiable credential issuer service
@@ -129,7 +129,7 @@ app.get('/issue-request', async (req, res) => {
   req.session.issueRequest = await requestBuilder.build().create();
   
   // Return a reference to the issue request that can be encoded as a QR code
-  var requestUri = encodeURIComponent(`https://${req.hostname}/issue-request.jwt?id=${req.session.id}`);
+  var requestUri = encodeURIComponent(`https://${req.hostname}/api/issuer/issue-request.jwt?id=${req.session.id}`);
   var issueRequestReference = 'openid://vc/?request_uri=' + requestUri;
   res.send(issueRequestReference);
 
@@ -139,7 +139,7 @@ app.get('/issue-request', async (req, res) => {
 // When the QR code is scanned, Authenticator will dereference the
 // issue request to this URL. This route simply returns the cached
 // issue request to Authenticator.
-app.get('/issue-request.jwt', async (req, res) => {
+app.get('/api/issuer/issue-request.jwt', async (req, res) => {
 
   // Look up the issue reqeust by session ID
   sessionStore.get(req.query.id, (error, session) => {

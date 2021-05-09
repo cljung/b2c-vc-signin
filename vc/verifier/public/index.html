@@ -41,20 +41,20 @@
                         var respPresReq = null;
 
                         signIn.addEventListener('click', () => {
-                            fetch('presentation-request')
+                            fetch('api/verifier/presentation-request')
                                 .then(function (response) {
                                     response.text().then(function (message) {
                                         respPresReq = JSON.parse(message);
                                         if (/Android/i.test(navigator.userAgent)) {
-                                            console.log(`Android device! Using deep link (${respPresReq.link}).`);
-                                            window.location.replace(respPresReq.link);
+                                            console.log(`Android device! Using deep link (${respPresReq.url}).`);
+                                            window.location.replace(respPresReq.url);
                                         } else if (/iPhone/i.test(navigator.userAgent)) {
-                                            console.log(`iOS device! Using deep link (${respPresReq.link}).`);
-                                            window.location.replace(respPresReq.link);
+                                            console.log(`iOS device! Using deep link (${respPresReq.url}).`);
+                                            window.location.replace(respPresReq.url);
                                         } else {
-                                            console.log(`Not Android. Generating QR code encoded with ${respPresReq.link}`);
+                                            console.log(`Not Android. Generating QR code encoded with ${respPresReq.url}`);
                                             document.getElementById('qrcodeFrame').style.display="block";
-                                            qrcode.makeCode(respPresReq.link);
+                                            qrcode.makeCode(respPresReq.url);
                                             document.getElementById('sign-in').style.display = "none";
                                             document.getElementById('qrText').style.display = "block";
                                         }
@@ -89,7 +89,7 @@
                             /* use this if you just test via B2C */
                             var checkStatus = setInterval(function () {
                                 if ( null == respPresReq) { return; } 
-                                fetch('presentation-response-b2c?id=' + respPresReq.id)
+                                fetch('api/verifier/presentation-response-b2c?id=' + respPresReq.id)
                                     .then(response => response.text())
                                     .catch(error => document.getElementById("message").innerHTML = error)
                                     .then(response => {
@@ -110,7 +110,7 @@
                             }, 3000);
                         })
         
-                        fetch('echo')
+                        fetch('api/verifier/echo')
                         .then(response => response.text())
                         .catch(error => document.getElementById("message").innerHTML = error)
                         .then(response => {

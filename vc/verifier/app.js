@@ -94,7 +94,7 @@ function requestTrace( req ) {
 }
 
 // echo function so you can test deployment
-app.get("/echo",
+app.get("/api/verifier/echo",
     function (req, res) {
         requestTrace( req );
         res.status(200).json({
@@ -134,13 +134,13 @@ app.get('/logo.png', function (req, res) {
 // Generate an presentation request, cache it on the server,
 // and return a reference to the issuance reqeust. The reference
 // will be displayed to the user on the client side as a QR code.
-app.get('/presentation-request', async (req, res) => {
+app.get('/api/verifier/presentation-request', async (req, res) => {
   requestTrace( req );
   // Construct a request to issue a verifiable credential 
   // using the verifiable credential issuer service
   state = req.session.id;
   const nonce = base64url.encode(Buffer.from(secureRandom.randomUint8Array(10)));
-  const clientId = `https://${req.hostname}/presentation-response`;
+  const clientId = `https://${req.hostname}/api/verifier/presentation-response`;
   const requestBuilder = new RequestorBuilder({
     clientName: client.client_name,
     clientId: clientId,
@@ -166,19 +166,19 @@ app.get('/presentation-request', async (req, res) => {
   // Cache the issue request on the server
   req.session.presentationRequest = await requestBuilder.build().create(); 
   // Return a reference to the presentation request that can be encoded as a QR code
-  var requestUri = encodeURIComponent(`https://${req.hostname}/presentation-request.jwt?id=${req.session.id}`);
+  var requestUri = encodeURIComponent(`https://${req.hostname}/api/verifier/presentation-request.jwt?id=${req.session.id}`);
   var presentationRequestReference = 'openid://vc/?request_uri=' + requestUri;
  // res.send(presentationRequestReference);
   res.status(200).json({
     'id': req.session.id, 
-    "link": presentationRequestReference
+    "url": presentationRequestReference
     });
 })
 
 // When the QR code is scanned, Authenticator will dereference the
 // presentation request to this URL. This route simply returns the cached
 // presentation request to Authenticator.
-app.get('/presentation-request.jwt', async (req, res) => {
+app.get('/api/verifier/presentation-request.jwt', async (req, res) => {
   requestTrace( req );
   // Look up the issue reqeust by session ID
   sessionStore.get(req.query.id, (error, session) => {
@@ -191,7 +191,7 @@ app.get('/presentation-request.jwt', async (req, res) => {
 // Authenticator will present the credential back to this server
 // at this URL. We can verify the credential and extract its contents
 // to verify the user is a Verified Credential Ninja.
-app.post('/presentation-response', parser, async (req, res) => {
+app.post('/api/verifier/presentation-response', parser, async (req, res) => {
   requestTrace( req );
   if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
     console.log('BODY missing');
@@ -199,7 +199,7 @@ app.post('/presentation-response', parser, async (req, res) => {
   }  
   // Set up the Verifiable Credentials SDK to validate all signatures
   // and claims in the credential presentation.
-  const clientId = `https://${req.hostname}/presentation-response`
+  const clientId = `https://${req.hostname}/api/verifier/presentation-response`
 
   // Validate the credential presentation and extract the credential's attributes.
   // If this check succeeds, the user is a Verified Credential Ninja.
@@ -231,7 +231,7 @@ app.post('/presentation-response', parser, async (req, res) => {
 // Checks to see if the server received a successful presentation
 // of a Verified Credential Ninja card. Updates the browser UI with
 // a successful message if the user is a verified ninja.
-app.get('/presentation-response', async (req, res) => {
+app.get('/api/verifier/presentation-response', async (req, res) => {
   requestTrace( req );
   var id = req.query.id;
   // If a credential has been received, display the contents in the browser
@@ -248,7 +248,7 @@ app.get('/presentation-response', async (req, res) => {
   })
 })
 
-app.get('/presentation-response-b2c', async (req, res) => {
+app.get('/api/verifier/presentation-response-b2c', async (req, res) => {
   requestTrace( req );
   var id = req.query.id;
   // If a credential has been received, display the contents in the browser
@@ -278,7 +278,7 @@ app.get('/presentation-response-b2c', async (req, res) => {
 })
 // same as above but for B2C where we return 409 Conflict if Auth Result isn't OK
 var parserJson = bodyParser.json();
-app.post('/presentation-response-b2c', parserJson, async (req, res) => {
+app.post('/api/verifier/presentation-response-b2c', parserJson, async (req, res) => {
   requestTrace( req );
   var id = req.body.id;  
   // If a credential has been received, display the contents in the browser
