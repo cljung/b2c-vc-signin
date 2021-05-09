@@ -26,7 +26,7 @@ The didconfig-b2c.json file looks like below.
     "kvRemoteSigningKeyId" : "issuerSigningKeyIon-...guid...",
     "did": "did:ion:...something...",
     "didVerifier": "did:ion:...something...",
-    "resolverEndpoint": "https://beta.did.msidentity.com/v1.0/9885457a-2026-4e2c-a47e-32ff52ea0b8d/verifiableCredential/contracts/YourtenantMembership",
+    "manifest": "https://beta.did.msidentity.com/v1.0/9885457a-2026-4e2c-a47e-32ff52ea0b8d/verifiableCredential/contracts/YourtenantMembership",
     "credentialType": "YourtenantMembership",
     "client": {
         "client_name": "Yourtenant Verifier",

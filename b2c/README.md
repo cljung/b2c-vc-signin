@@ -29,7 +29,8 @@ The XML files in the [policies](/policies) folder are the B2C Custom Policies. T
 - Search-and-replace all references to `yourtenant.onmicrosoft.com` with your real tenant name, for example `contosob2c.onmicrosof.com`, in all policy xml files.
 - Search-and-replace all references to `yourstorageaccount.blob.core.windows.net` with your real storage account in file `TrustFrameworkExtensions.xml`. Make sure the path matches to the full path of each uploaded html document in previous section.
 - Find the `login-NonInteractive` TechnicalProfile in the `TrustFrameworkExtensions.xml` file and replace the guids for the IdentityExperienceFramework and ProxyIdentityExperienceFramework applications. You need to replace it with the AppIDs (client_id's) from the registered applications in your B2C tenant. Please note that there are 2+2 places you need to update!
-- Find the `ServiceUrl` for the VC Verifier deployed and update it.
+- Find `ServiceUrl` (2 places) for the VC Verifier deployed and update it.
+- Find `VCServiceUrl` (1 place) and update it with the path to your API. The `selfAsserted.html` webpage gets this value from B2C upon page load so it knows where reach the API.
 - Possibly add your AppInsights InstrumentationKey in the `Sign*.xml` files so you can get trace events when the B2C policy engine executes your policy. If you don't want to use AppInsights, comment that line out.
 - Upload the policies in order: `TrustFrameworkBase.xml`, `TrustFrameworkExtensions.xml` and then the rest in no particular order.
  
