@@ -10,8 +10,6 @@ In order to use the Verifiable Credentials with Azure AD B2C, you need to deploy
 # Deploy the custom html
 
 - Create an Azure Storage Account and CORS enable it for your B2C tenant, as explained [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/customize-ui-with-html?pivots=b2c-user-flow#2-create-an-azure-blob-storage-account). You should perform step 2 through 3.1. Note that you can select `LRS` for Replication as `RA-GRS` is a bit overkill.
-- Edit the [selfAsserted.html](/b2c/html/selfAsserted.html) file and replace the url reference `var apiUrl = "https://yourappname.azurewebsites.net";` with the url for your verifier deployment.
-If you are using `ngrok`, this url will look something like `https://901dc458579f.ngrok.io`. If you are using Azure App Services, it will look something like `https://yourappname.azurewebsites.net` 
 - Edit both `selfAsserted.html` and `unified.html` and replace `https://your-storage-account.blob.core.windows.net/your-container/` with the name of your storage account and container.
 - Edit `selfAsserted.html` and change the link to the issuer sample in the html element `Don't have a digital membership card?`. It should point to your deployed VC sample issuer. Again, this would either point to your `ngrok` process for the issuer or to your Azure App Service deployment of the sample issuer.  
 - If you want a different background and logo images, change the `img` html elements in `selfAsserted.html` and `unified.html`. 
@@ -30,6 +28,7 @@ The XML files in the [policies](/policies) folder are the B2C Custom Policies. T
 - Search-and-replace all references to `yourstorageaccount.blob.core.windows.net` with your real storage account in file `TrustFrameworkExtensions.xml`. Make sure the path matches to the full path of each uploaded html document in previous section.
 - Find the `login-NonInteractive` TechnicalProfile in the `TrustFrameworkExtensions.xml` file and replace the guids for the IdentityExperienceFramework and ProxyIdentityExperienceFramework applications. You need to replace it with the AppIDs (client_id's) from the registered applications in your B2C tenant. Please note that there are 2+2 places you need to update!
 - Find `ServiceUrl` (2 places) for the VC Verifier deployed and update it.
+If you are using ngrok, this url will look something like https://901dc458579f.ngrok.io/api/verifier. If you are using Azure App Services, it will look something like https://yourappname.azurewebsites.net/api/verifier
 - Find `VCServiceUrl` (1 place) and update it with the path to your API. The `selfAsserted.html` webpage gets this value from B2C upon page load so it knows where reach the API.
 - Possibly add your AppInsights InstrumentationKey in the `Sign*.xml` files so you can get trace events when the B2C policy engine executes your policy. If you don't want to use AppInsights, comment that line out.
 - Upload the policies in order: `TrustFrameworkBase.xml`, `TrustFrameworkExtensions.xml` and then the rest in no particular order.
