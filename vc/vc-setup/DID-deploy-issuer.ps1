@@ -69,7 +69,8 @@ $roles = Get-AzRoleAssignment -Scope $scope
 $roleName = "Storage Blob Data Reader"
 
 if (!($roles | where {$_.DisplayName -eq $roleName})) {
-    New-AzRoleAssignment -ObjectId $spVCIS.Id -RoleDefinitionName $roleName -Scope $scope
+    New-AzRoleAssignment -ObjectId $spVCIS.Id -RoleDefinitionName $roleName -Scope $scope     # Verifiable Credentials Issuer app
+    New-AzRoleAssignment -ObjectId $userObjectId -RoleDefinitionName $roleName -Scope $scope  # you, the admin
 }
 
 if ( $GenerateConfigFiles) 
@@ -83,7 +84,7 @@ $didconfigJson = @"
     "kvSigningKeyId": "..update this...",
     "kvRemoteSigningKeyId" : "issuerSigningKeyIon- ... something in your KeyVault keys",
     "did": "did:ion: ... Issuer Identifier DID in the VC blade in portal.azure.com",
-    "resolverEndpoint": "https://beta.did.msidentity.com/v1.0/$($ctx.Tenant.Id)/verifiableCredential/contracts/$VCType"
+    "manifest": "https://beta.did.msidentity.com/v1.0/$($ctx.Tenant.Id)/verifiableCredential/contracts/$VCType"
 }
 "@
     Set-Content -Path "$((get-location).Path)\didconfig.json" -Value $didconfigJson
