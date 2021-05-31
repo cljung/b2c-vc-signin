@@ -248,7 +248,7 @@ app.get('/api/verifier/presentation-response', async (req, res) => {
   })
 })
 
-app.get('/api/verifier/presentation-response-b2c', async (req, res) => {
+app.get('/api/verifier/presentation-response-status', async (req, res) => {
   requestTrace( req );
   var id = req.query.id;
   // If a credential has been received, display the contents in the browser
@@ -257,15 +257,17 @@ app.get('/api/verifier/presentation-response-b2c', async (req, res) => {
     var givenName = null;
     var surName = null;
     if (session && session.verifiedCredential) {
-      console.log( "/presentation-response - has VC " + id);
+      console.log( "/presentation-response-status - has VC " + id);
       console.log(session.verifiedCredential);
       givenName = session.verifiedCredential.vc.credentialSubject.firstName;
       surName = session.verifiedCredential.vc.credentialSubject.lastName;
       credentialsVerified = true;
     } else {
-      console.log( "/presentation-response - no VC " + id);
+      console.log( "/presentation-response-status - no VC " + id);
     }
     res.status(200).json({
+      'status': 2,
+      'message': `${givenName} ${surName}`,
       'id': id, 
       'credentialsVerified': credentialsVerified,
       'credentialType': credentialType,

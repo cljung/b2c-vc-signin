@@ -134,7 +134,7 @@
                     if ( null == respPresReq) { return; } 
                     console.log('setInternal() trigger - GET /vccheck');
                     document.getElementById("VCStateId").value = respPresReq.id;
-                    fetch(apiUrl + '/presentation-response-b2c?id=' + respPresReq.id)
+                    fetch(apiUrl + '/presentation-response-status?id=' + respPresReq.id)
                     .then(response => response.text())
                     .catch(error => {
                         displayMessage(error);
@@ -142,9 +142,9 @@
                         clearInterval(tId);
                     })
                     .then(response => {
-                        var authResult = JSON.parse(response);
-                        if ( authResult.credentialsVerified ) {
-                            displayMessage( `${authResult.displayName} authenticated as ${authResult.credentialType}` );
+                        var respMsg = JSON.parse(response);
+                        if (respMsg.status == 2) { // respMsg.status == 2 -> VC presented and validated
+                            displayMessage( respMsg.message + " validated successfully" );
                             console.log('clearInterval');
                             clearInterval(tId);
                             document.getElementById("continue").click();
