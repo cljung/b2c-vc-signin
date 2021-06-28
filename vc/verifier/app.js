@@ -256,17 +256,19 @@ app.get('/api/verifier/presentation-response-status', async (req, res) => {
     var credentialsVerified = false;
     var givenName = null;
     var surName = null;
+    var status = 0;
     if (session && session.verifiedCredential) {
       console.log( "/presentation-response-status - has VC " + id);
       console.log(session.verifiedCredential);
       givenName = session.verifiedCredential.vc.credentialSubject.firstName;
       surName = session.verifiedCredential.vc.credentialSubject.lastName;
       credentialsVerified = true;
+      status = 2;
     } else {
       console.log( "/presentation-response-status - no VC " + id);
     }
     res.status(200).json({
-      'status': 2,
+      'status': status,
       'message': `${givenName} ${surName}`,
       'id': id, 
       'credentialsVerified': credentialsVerified,
